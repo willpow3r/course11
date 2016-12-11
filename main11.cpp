@@ -4,91 +4,18 @@
 #include <string.h>
 #include <getopt.h>
 #include <math.h>
+#include "course_lib.h"
 
-#define OPTL 15
-
-/*
-будем брать последовательность из файла
-*/
-
+// шаг увеличения объёма памяти, в элементах
 const int grow_step = 256;
 int capacity = grow_step;
-int *A;
+#define OPTL 15
 
 void print_r(FILE *f, int *A, int len) {
 	for (int i = 0; i < len; i++) {
 		fprintf(f, "%d ", A[i]);
 	}
 	fprintf(f, "\n");
-}
-
-template<class T> void swap(T &a, T &b) {
-	T tmp = a;
-	a = b;
-	b = tmp;
-}
-
-template<class T> void sort_bubble(T *A, int len, long &iter, long &cmp) {
-	for (int i = 0; i < len; i++) {
-		for (int j = i + 1; j < len; j++) {
-			if (A[i] > A[j]) {
-				swap(A[i], A[j]);
-				iter++;
-			}
-			cmp++;
-		}
-	}
-}
-
-template<class T> void sort_quick(T *Ar, int len, long &iter, long &cmp) {
-	int l = 0, r = len - 1, tmp;
-	//int m = Ar[len / 2];
-	T m = Ar[rand() % len];
-	
-	do {
-		while (Ar[l] < m) { l++; cmp++; }
-		while (Ar[r] > m) { r--; cmp++; }
-		
-		if (l <= r) {
-			swap<T>(Ar[l], Ar[r]);
-			l++;
-			r--;
-			iter++;
-		}
-	} while (l <= r);
-	if (r > 0) sort_quick(Ar, r + 1, iter, cmp);
-	if (len - 1 > l) sort_quick(Ar + l, len - l, iter, cmp);
-}
-
-int sort_quick(int *Ar, int start, int end) {
-	printf("Start sorting from %d to %d\n", start, end - 1);
-	long l = start, r = end - 1; // поставить указатели на исходные места
-	int temp, m, iter = 0;
-
-	m = Ar[start + ((end - start) / 2)]; // центральный элемент
-
-	do { // процедура разделения
-		while (Ar[l] < m) l++;
-		while (Ar[r] > m) r--;
-
-		if (l <= r) {
-			printf("Swapping %ld with %ld\n", l, r);
-			swap(Ar[l], Ar[r]);
-			l++; 
-			r--;
-			iter++;
-		}
-	} while (l <= r);
-
-	if (r > start) {
-		fprintf(stderr, "Sorting left from %d to %ld...\n", start, r);
-		iter += sort_quick(Ar, start, r + 1);
-	}
-	if (end - 1 > l) {
-		fprintf(stderr, "Sorting right from %ld to %d...\n", l, end - 1);
-		iter += sort_quick(Ar, l, end);
-	}
-	return iter;
 }
 
 int main(int argc, char **argv) {
@@ -133,7 +60,7 @@ int main(int argc, char **argv) {
 	
 	// устанавливаем генератор случайных чисел
 	srand(time(NULL));
-#pragma region генератор тестов
+#pragma region Automatic Test Generator
 	if (N > 0) {
 		int cnt = pow(2, N);
 		int max = cnt / 16;
@@ -180,7 +107,7 @@ int main(int argc, char **argv) {
 		return 2;
 	}
 	// выделяем память динамически
-	A = (int*)malloc(sizeof(int) * capacity);
+	int *A = (int*)malloc(sizeof(int) * capacity);
 	int i = 0;
 	while (!feof(f)) { // пока не конец файла
 		if (i >= capacity) { // если памяти не хватает
@@ -192,10 +119,7 @@ int main(int argc, char **argv) {
 	}
 	fclose(f);
 	A = (int*)realloc(A, sizeof(int) * --i); // обрежем лишнюю память
-#ifdef DEBUG
-	printf("Source array:\n");
-	print_r(stdout, A, i);
-#endif
+
 	long iter = 0, cmp = 0;
 	// замеряем время
 	struct timespec time1, time2;
@@ -212,7 +136,6 @@ int main(int argc, char **argv) {
 	printf("Result array:\n");
 	print_r(stdout, A, i);
 #endif
-	//printf("Long size: %lu\n", sizeof(long));
 	printf("Sequence length: %d\n", i);
 	printf("Time elapsed: %.6lf\n", elapsed_time);
 	printf("Compares: %ld\n", cmp);
