@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "course_lib.h"
 
 template<typename T> void swap(T &a, T &b) {
