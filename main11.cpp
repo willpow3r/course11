@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 		int cnt = pow(2, N);
 		int max = cnt / 16;
 		// случайные числа
-		sprintf(buf, "test-%02d-rnd.txt", N);
+		sprintf(buf, "test-rnd-%02d.txt", N);
 		f = fopen(buf, "w");
 		if (!f) {
 			printf("[x] Could not open outfile '%s'\n", outfile);
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
 		}
 		fclose(f);
 		// возрастающие числа
-		sprintf(buf, "test-%02d-asc.txt", N);
+		sprintf(buf, "test-asc-%02d.txt", N);
 		f = fopen(buf, "w");
 		if (!f) {
 			printf("[x] Could not open outfile '%s'\n", outfile);
@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
 		}
 		fclose(f);
 		// убывающие числа
-		sprintf(buf, "test-%02d-dsc.txt", N);
+		sprintf(buf, "test-dsc-%02d.txt", N);
 		f = fopen(buf, "w");
 		if (!f) {
 			printf("[x] Could not open outfile '%s'\n", outfile);
@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
 	if (!f) {
 		printf("[!] Could not open outfile '%s'\n", outfile);
 	}
-	fprintf(f, "%8d\t%.6f\t%14ld\t%14ld\t%s\n", i, elapsed_time, cmp, iter, infile);
+	fprintf(f, "%8d;\t%.6f;\t%14ld;\t%14ld;\t%s\n", i, elapsed_time, cmp, iter, infile);
 	fclose(f);
 	delete A;
 	return 0;

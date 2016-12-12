@@ -8,14 +8,19 @@ template<typename T> void swap(T &a, T &b) {
 }
 
 template<typename T> void sort_bubble(T *A, int len, long &iter, long &cmp) {
+	iter = 0, cmp = 0;
+	bool f;
 	for (int i = 0; i < len; i++) {
-		for (int j = i + 1; j < len; j++) {
-			if (A[i] > A[j]) {
-				swap(A[i], A[j]);
+		f = false;
+		for (int j = 0; j < len - i - 1; j++) {
+			if (A[j] > A[j + 1]) {
+				swap(A[j], A[j + 1]);
+				f = true;
 				iter++;
 			}
 			cmp++;
 		}
+		if (!f) break;
 	}
 }
 
